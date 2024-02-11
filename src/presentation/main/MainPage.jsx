@@ -1,4 +1,4 @@
-import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button, MenuList, MenuItem, Divider } from "@mui/material"
+import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button, MenuList, MenuItem, Divider, TextField } from "@mui/material"
 import { Container} from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ const MainPage = () => {
     const [drawerOpen, setDrawerOpen]= useState(false)
     const [modalOpen, setModalOpen] = useState(false)
     const [dataEquipos, setDataEquipos]= useState([])
+    const [filtro, setFiltro]=useState("")
 
     const navigate=useNavigate()
 
@@ -28,7 +29,8 @@ const MainPage = () => {
             console.error(error)
         })*/
 
-        const response=await fetch("http://localhost:3000/equipos.json")
+        const response=await fetch(
+            `http://localhost:8000/proyectos/ver-equipos?nombre=${filtro}`)
         const data=await response.json()
         const listaEquiposStr=JSON.stringify(data)
         //tmb puede usarse session storage, con eso al cerrar el nav se eliminan los datos
@@ -66,6 +68,10 @@ const MainPage = () => {
             setDataEquipos(equipos)
         }
     },[])
+
+    useEffect(()=>{
+        obtenerEquiposHTTP();
+    },[filtro])
 
     return <Box>
         <AppBar position="static">
@@ -109,6 +115,14 @@ const MainPage = () => {
             <Button variant="contained" 
                     sx={{mb:2, mt:2}} 
                     onClick={onModalOpenClick} >+</Button>
+            <TextField type="text" placeholder="Filtro"
+                    sx={{mb:2, ml:2}}
+                    value={filtro}
+                    onChange={(event)=>{
+                        setFiltro(event.target.value)
+                        obtenerEquiposHTTP();
+                        }}
+                    />
             <GrillaEquipos listaEquipos={dataEquipos} />
         </Container>
 

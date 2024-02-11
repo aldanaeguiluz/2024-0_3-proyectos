@@ -9,7 +9,6 @@ const LoginPage = () => {
     const [username, setUsername]= useState("")
     const [password, setPassword]= useState("") 
     const [loginIncorrecto, setLoginincorrecto]=useState(false)
-    const [dataUsuarios, setDataUsuarios]=useState([])
 
     const navigate = useNavigate()
 
@@ -21,18 +20,13 @@ const LoginPage = () => {
         setPassword(event.target.value)
     }
 
-    const obtenerUsuariosHTTP= async()=>{
-        const response= await fetch("http://localhost:3000/usuarios.json")
-        const data=await response.json()
-        setDataUsuarios(data)
-    }
+    const loginOnClick = async() => {
 
-    const loginOnClick = () => {
-        console.log(`Usuario ingresado: ${username}`)
-        const listaFiltrada = dataUsuarios.filter((usuario) =>{
-            return usuario.username === username && usuario.password === password
-        })
-        if(listaFiltrada.length>0){
+        const response=await fetch(`http://localhost:8000/proyectos/login/${username}/${password}`)
+        const data= await response.json()
+
+        if(data.msg===""){
+            //Login correcto
             console.log("Login correcto")
             //Almacenando en localStorage
             sessionStorage.setItem("USERNAME", username)
@@ -42,6 +36,7 @@ const LoginPage = () => {
                 }
             })
         }else{
+            //Login incorrecto
             console.log("Login incorrecto")
             setLoginincorrecto(true)
         }
@@ -52,7 +47,6 @@ const LoginPage = () => {
             navigate ("/main")
             return
         }
-        obtenerUsuariosHTTP()
     },[])
 
     return <Container maxWidth="sm">
