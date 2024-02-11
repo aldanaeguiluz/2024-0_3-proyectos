@@ -22,14 +22,20 @@ const LoginPage = () => {
 
     const loginOnClick = async() => {
 
+        /* Para hacer un post con form que se envia por el body
         const formData= new FormData()
         formData.append("username", username)
-        formData.append("password", password)
+        formData.append("password", password)*/
 
+        const dataUsername={
+            username: username,
+            password: password
+        }
 
-        const response=await fetch("http://localhost:8000/proyectos/login",{
+        const response=await fetch("http://localhost:8000/proyectos/login-json",{
             method:"post",
-            body: formData
+            //body: formData Es para el post en el body con un form
+            body: JSON.stringify(dataUsername)
         })
         const data= await response.json()
 
