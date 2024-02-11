@@ -1,14 +1,15 @@
 import { Box, Button, Container, TextField, Alert } from "@mui/material"
 import { useState } from "react"
-import dataUsuarios from "../../data/usuarios"
 import CheckIcon from '@mui/icons-material/Check';
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const LoginPage = () => {
     
     const [username, setUsername]= useState("")
     const [password, setPassword]= useState("") 
     const [loginIncorrecto, setLoginincorrecto]=useState(false)
+    const [dataUsuarios, setDataUsuarios]=useState([])
 
     const navigate = useNavigate()
 
@@ -20,13 +21,21 @@ const LoginPage = () => {
         setPassword(event.target.value)
     }
 
+    const obtenerUsuariosHTTP= async()=>{
+        const response= await fetch("http://localhost:3000/usuarios.json")
+        const data=await response.json()
+        setDataUsuarios(data)
+    }
+
     const loginOnClick = () => {
         console.log(`Usuario ingresado: ${username}`)
         const listaFiltrada = dataUsuarios.filter((usuario) =>{
-            return usuario.username == username && usuario.password == password
+            return usuario.username === username && usuario.password === password
         })
         if(listaFiltrada.length>0){
             console.log("Login correcto")
+            //Almacenando en localStorage
+            sessionStorage.setItem("USERNAME", username)
             navigate("/main", {
                 state: {
                     username: username
@@ -37,6 +46,14 @@ const LoginPage = () => {
             setLoginincorrecto(true)
         }
     }
+
+    useEffect(()=>{
+        if(sessionStorage.getItem("USERNAME")!==null){
+            navigate ("/main")
+            return
+        }
+        obtenerUsuariosHTTP()
+    },[])
 
     return <Container maxWidth="sm">
         <Box component="form"
