@@ -1,10 +1,28 @@
-import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Card, CardContent, CardActions } from "@mui/material"
-import { Container, ListItemIcon } from "@mui/material"
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { Dialog, DialogTitle, Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button, DialogContent, DialogActions } from "@mui/material"
+import { Container} from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
-import StarIcon from '@mui/icons-material/Star';
+import { useState } from "react";
+import GrillaEquipos from "./components/GrillaEquipos";
+import dataEquipos from "../../data/equipos"
+import ModalFormularioEquipo from "./components/ModalFormularioEquipo";
 
 const MainPage = () => {
+    
+    const [drawerOpen, setDrawerOpen]= useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const onMenuIconClick= () => {
+        setDrawerOpen(true)
+    }
+
+    const onModalClose=()=>{
+        setModalOpen(false)
+    }
+
+    const onModalOpenClick=()=>{
+        setModalOpen(true)
+    }
+
     return <Box>
         <AppBar position="static">
             <Toolbar>
@@ -14,6 +32,7 @@ const MainPage = () => {
                     color="inherit"
                     aria-label="menu"
                     sx={{ mr: 2 }}
+                    onClick={onMenuIconClick}
                 >
                 <MenuIcon />
                 </IconButton>
@@ -25,7 +44,8 @@ const MainPage = () => {
         </AppBar>
         <Drawer variant="temporary"
             anchor="left"
-            open={false}>
+            onClose={()=>{ setDrawerOpen(false) }}
+            open={drawerOpen}>
             <List>
                 <ListItem>
                     <ListItemText primary={"Menu 1"} />
@@ -36,105 +56,14 @@ const MainPage = () => {
             </List>
         </Drawer>
         <Container sx={ { mt : 2 }}>
-            <Grid container spacing={2}>
-                <Grid xs={4}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="h5" component="div">
-                                Equipo 1
-                            </Typography>
-                            <List>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Cristiano Ronaldo"} />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Lionel Messi"} />
-                                </ListItem>
-                            </List>
-                        </CardContent>
-                        <CardActions></CardActions>
-                    </Card>
-                </Grid>
-                <Grid xs={4}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="h5" component="div">
-                                Equipo 2
-                            </Typography>
-                            <List>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Cristiano Ronaldo"} />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Lionel Messi"} />
-                                </ListItem>
-                            </List>
-                        </CardContent>
-                        <CardActions></CardActions>
-                    </Card>
-                </Grid>
-                <Grid xs={4}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="h5" component="div">
-                                Equipo 3
-                            </Typography>
-                            <List>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Cristiano Ronaldo"} />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Lionel Messi"} />
-                                </ListItem>
-                            </List>
-                        </CardContent>
-                        <CardActions></CardActions>
-                    </Card>
-                </Grid>
-                <Grid xs={4}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="h5" component="div">
-                                Equipo 4
-                            </Typography>
-                            <List>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Cristiano Ronaldo"} />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemIcon>
-                                        <StarIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"Lionel Messi"} />
-                                </ListItem>
-                            </List>
-                        </CardContent>
-                        <CardActions></CardActions>
-                    </Card>
-                </Grid>
-            </Grid>
+            <Button variant="contained" 
+                    sx={{mb:2, mt:2}} 
+                    onClick={onModalOpenClick} >+</Button>
+            <GrillaEquipos listaEquipos={dataEquipos} />
         </Container>
+
+        <ModalFormularioEquipo modalOpen={modalOpen} onModalClose={onModalClose} />
+
     </Box>
 }
 
