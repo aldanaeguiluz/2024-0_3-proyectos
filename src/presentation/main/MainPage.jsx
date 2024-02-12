@@ -1,4 +1,4 @@
-import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button, MenuList, MenuItem, Divider, TextField } from "@mui/material"
+import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button, MenuList, MenuItem, Divider, TextField, Select, InputLabel } from "@mui/material"
 import { Container} from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ const MainPage = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [dataEquipos, setDataEquipos]= useState([])
     const [filtro, setFiltro]=useState("")
+    const [filtroAnho, setFiltroAnho]=useState("0")
 
     const navigate=useNavigate()
 
@@ -30,7 +31,7 @@ const MainPage = () => {
         })*/
 
         const response=await fetch(
-            `http://localhost:8000/proyectos/ver-equipos?nombre=${filtro}`)
+            `http://localhost:8000/proyectos/ver-equipos?nombre=${filtro}&anho=${filtroAnho}`)
         const data=await response.json()
         const listaEquiposStr=JSON.stringify(data)
         //tmb puede usarse session storage, con eso al cerrar el nav se eliminan los datos
@@ -71,7 +72,7 @@ const MainPage = () => {
 
     useEffect(()=>{
         obtenerEquiposHTTP();
-    },[filtro])
+    },[filtro, filtroAnho])
 
     return <Box>
         <AppBar position="static">
@@ -116,13 +117,19 @@ const MainPage = () => {
                     sx={{mb:2, mt:2}} 
                     onClick={onModalOpenClick} >+</Button>
             <TextField type="text" placeholder="Filtro"
-                    sx={{mb:2, ml:2}}
+                    sx={{mb:2, ml:2, mr:2}}
                     value={filtro}
                     onChange={(event)=>{
-                        setFiltro(event.target.value)
-                        obtenerEquiposHTTP();
+                        setFiltro(event.target.value);
                         }}
                     />
+            <Select label={"Año"}
+                value={filtroAnho} 
+                onChange={(event)=>{setFiltroAnho(event.target.value)}} >
+                <MenuItem value={"0"} >Todos</MenuItem>
+                <MenuItem value={"2023"}>2023</MenuItem>
+                <MenuItem value={"2024"}>2024</MenuItem>
+            </Select>
             <GrillaEquipos listaEquipos={dataEquipos} />
         </Container>
 
