@@ -13,6 +13,12 @@ const CardEquipo = (props) => {
         <Button variant="text">
             Tareas
         </Button>
+        <Button variant="text" 
+                onClick={
+                    ()=>{props.eliminarEquipo(props.idEquipo)}
+                }>
+            Eliminar
+        </Button>
         </CardActions>
     </Card>
 }

@@ -5,6 +5,7 @@ import TablaIntegrantes from "./TablaIntegrantes";
 const ModalFormularioEquipo = (props) => {
 
     const [nombreIntegrante, setNombreIntegrante]= useState("")
+    const [anhoEquipo, setAnhoEquipo]=useState(2014)
     const [codigoIntegrante, setCodigoIntegrante]= useState("")
     const [listaIntegrantes, setListaIntegrantes]= useState([])
     const [nombreEquipo, setNombreEquipo]=useState("")
@@ -12,8 +13,16 @@ const ModalFormularioEquipo = (props) => {
     const onNombreChangeHandler = (event) => {
         setNombreIntegrante(event.target.value)
     }
+    
     const onCodigoChangeHandler = (event) => {
         setCodigoIntegrante(event.target.value)
+    }
+
+    const registrarEquipo=()=>{
+        props.onRegistrarEquipo({
+            nombre: nombreEquipo,
+            anho: anhoEquipo
+        })
     }
 
     const agregarIntegranteOnClick = () => {
@@ -40,6 +49,10 @@ const ModalFormularioEquipo = (props) => {
         setNombreEquipo(event.target.value)
     }
 
+    const onAnhoEquipoChangeHandler=(event)=>{
+        setAnhoEquipo(event.target.value)
+    }
+
     return <Dialog
         open={props.modalOpen} 
         onClose={props.onModalClose} >
@@ -51,6 +64,10 @@ const ModalFormularioEquipo = (props) => {
                         variant="outlined"
                         value={nombreEquipo}
                         onChange={onNombreEquipoChangeHandler} />
+            <TextField label="Anho"
+                        variant="outlined"
+                        value={anhoEquipo}
+                        onChange={onAnhoEquipoChangeHandler} />
             <hr />
             <h4>Integrantes</h4>
             <TextField label="Nombre integrante" 
@@ -71,7 +88,8 @@ const ModalFormularioEquipo = (props) => {
                             />
         </DialogContent>
         <DialogActions>
-            <Button variant="contained">
+            <Button variant="contained"
+                onClick={registrarEquipo}>
                 Guardar
             </Button>
             <Button variant="contained">

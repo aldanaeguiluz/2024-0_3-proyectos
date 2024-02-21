@@ -18,8 +18,31 @@ const MainPage = () => {
     const [filtroAnho, setFiltroAnho]=useState("0")
 
     const navigate=useNavigate()
-
+    
     //const location=useLocation()
+
+    const guardarEquipoHTTP = async (equipo)=>{
+        const response= await fetch ("http://localhost:8000/proyectos/equipo", {
+            method: "post",
+            body: JSON.stringify({
+                nombre: equipo.nombre,
+                anho: equipo.anho
+            })
+        })
+        const data= await response.json()
+        if(data.msg===""){
+            setModalOpen(false)
+        }
+    }
+
+    const eliminarEquipoHTTP=async (idEquipo)=>{
+        const response= await fetch(`http://localhost:8000/proyectos/eliminar-equipo?id=${idEquipo}`)
+        const data= await response.json()
+
+        if(data.msg===""){
+            window.location.reload()
+        }
+    }
 
     const obtenerEquiposHTTP=async() =>{
         /*fetch("http://localhost:3000/equipos.json").then(()=>{
@@ -72,7 +95,7 @@ const MainPage = () => {
 
     useEffect(()=>{
         obtenerEquiposHTTP();
-    },[filtro, filtroAnho])
+    },[filtro, filtroAnho, modalOpen])
 
     return <Box>
         <AppBar position="static">
@@ -130,10 +153,14 @@ const MainPage = () => {
                 <MenuItem value={"2023"}>2023</MenuItem>
                 <MenuItem value={"2024"}>2024</MenuItem>
             </Select>
-            <GrillaEquipos listaEquipos={dataEquipos} />
+            <GrillaEquipos listaEquipos={dataEquipos}
+                            eliminarEquipo={eliminarEquipoHTTP} />
         </Container>
 
-        <ModalFormularioEquipo modalOpen={modalOpen} onModalClose={onModalClose} />
+        <ModalFormularioEquipo 
+            modalOpen={modalOpen} 
+            onModalClose={onModalClose} 
+            onRegistrarEquipo={guardarEquipoHTTP} />
 
     </Box>
 }
