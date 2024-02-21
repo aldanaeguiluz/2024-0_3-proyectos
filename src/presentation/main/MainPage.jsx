@@ -26,7 +26,8 @@ const MainPage = () => {
             method: "post",
             body: JSON.stringify({
                 nombre: equipo.nombre,
-                anho: equipo.anho
+                anho: equipo.anho,
+                integrantes: equipo.integrantes
             })
         })
         const data= await response.json()

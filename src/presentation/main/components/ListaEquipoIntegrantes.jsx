@@ -10,7 +10,7 @@ const ListaEquipoIntegrantes= (props) => {
                     <ListItemIcon>
                         <StarIcon />
                     </ListItemIcon>
-                    <ListItemText primary={integrante.nombre} />
+                    <ListItemText primary={`codigo: ${integrante.codigo} nombre: ${integrante.nombre}`} />
                 </ListItem>
             })
         }
